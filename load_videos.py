@@ -17,13 +17,13 @@ warnings.filterwarnings("ignore")
 
 DEVNULL = open(os.devnull, 'wb')
 
-def download(video_id, args):
-    video_path = os.path.join(args.video_folder, video_id + ".mp4")
-    subprocess.call([args.youtube, '-f', "''best/mp4''", '--write-auto-sub', '--write-sub',
-                     '--sub-lang', 'en', '--skip-unavailable-fragments',
-                     "https://www.youtube.com/watch?v=" + video_id, "--output",
-                     video_path], stdout=DEVNULL, stderr=DEVNULL)
-    return video_path
+#def download(video_id, args):
+    #video_path = os.path.join(args.video_folder, video_id + ".mp4")
+    #subprocess.call([args.youtube, '-f', "''best/mp4''", '--write-auto-sub', '--write-sub',
+                     #'--sub-lang', 'en', '--skip-unavailable-fragments',
+                    # "https://www.youtube.com/watch?v=" + video_id, "--output",
+                     #video_path], stdout=DEVNULL, stderr=DEVNULL)
+    #return video_path
 
 
 def run(data):
@@ -50,7 +50,7 @@ def run(data):
         for i, frame in enumerate(reader):
             for entry in all_chunks_dict:
                 if (i * ref_fps >= entry['start'] * fps) and (i * ref_fps < entry['end'] * fps):
-                    left, top, right, bot = entry['bbox']
+                    #left, top, right, bot = entry['bbox']
                     left = int(left / (ref_width / frame.shape[1]))
                     top = int(top / (ref_height / frame.shape[0]))
                     right = int(right / (ref_width / frame.shape[1]))
@@ -94,7 +94,7 @@ if __name__ == "__main__":
             os.makedirs(os.path.join(args.out_folder, partition))
 
     df = pd.read_csv(args.metadata)
-    video_ids = set(df['video_id'])
+    video_ids = set(df['Filename'])
     pool = Pool(processes=args.workers)
     args_list = cycle([args])
     for chunks_data in tqdm(pool.imap_unordered(run, zip(video_ids, args_list))):
